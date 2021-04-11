@@ -7,13 +7,13 @@ public class Backup {
         int fileCount = 0;
         File sourceFolder = new File(source);
         File destFolder = new File(dest);
-        if (sourceFolder.exists() == true) {
+        if (sourceFolder.exists()) {
             destFolder.mkdir();
             fileList = sourceFolder.list();
-            System.out.println("Staring backup of "+source+ " folder.");
+            System.out.println("Staring backup of " + source + " folder.");
             while (fileCount < fileList.length) {
-                copyFile(source+"/"+fileList[fileCount],dest+"/"+fileList[fileCount]);
-                fileCount ++ ;
+                BackupFile(source + "/" + fileList[fileCount], dest + "/" + fileList[fileCount]);
+                fileCount++;
 
             }
         } else {
@@ -21,12 +21,13 @@ public class Backup {
 
         }
     }
-    public void copyFile (String source, String dest){
+
+    public void BackupFile(String source, String dest) {
 
         File sourceFile;
         File destFile;
-        FileInputStream fis;
-        FileOutputStream fos;
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
         int buffer;
 
         sourceFile = new File(source);
@@ -35,14 +36,22 @@ public class Backup {
         try {
             fis = new FileInputStream(sourceFile);
             fos = new FileOutputStream(destFile);
-            while ((buffer = fis.read()) != -1 ) {
+            while ((buffer = fis.read()) != -1) {
                 fos.write(buffer);
             }
-            System.out.println("File "+sourceFile.getName() + " copied successfully.");
+            System.out.println("File " + sourceFile.getName() + " copied successfully.");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            try {
+                fos.close();
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
